@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tomato/Timer_service.dart';
-import 'package:tomato/task.dart';
+
 
 class TimerScreen extends StatelessWidget {
   final int focusT;
