@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tomato/Timer_service.dart';
+import 'package:tomato/task.dart';
 
 class TimerScreen extends StatelessWidget {
   final int focusT;
@@ -17,69 +18,90 @@ class TimerScreen extends StatelessWidget {
         automaticallyImplyLeading: true,
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
-        child: Consumer<TimerService>(
-          builder: (context, timer, child) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CustomPaint(
-                    size: Size(200, 200),
-                    painter: ClockPainter(timer.seconds),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "${timer.minutes.toString().padLeft(2, '0')}:${timer.seconds.toString().padLeft(2, '0')}",
-                    style: TextStyle(color: Colors.black, fontSize: 48),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          timer.resetTimer(focusT);
-                        },
-                        child: Icon(Icons.refresh,color: Colors.black,size: 30,),
-                        style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
-                            padding: EdgeInsets.symmetric(horizontal: 5,vertical: 5)
-                        ),),
-                      ElevatedButton(
+      body: Stack(
+        children:[ Center(
+          child: Consumer<TimerService>(
+            builder: (context, timer, child) {
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(0, 150, 0, 0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CustomPaint(
+                      size: Size(200, 200),
+                      painter: ClockPainter(timer.seconds),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      "${timer.minutes.toString().padLeft(2, '0')}:${timer.seconds.toString().padLeft(2, '0')}",
+                      style: TextStyle(color: Colors.black, fontSize: 48),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
                           onPressed: () {
-                            timer.isRunning
-                                ? timer.stopTimer()
-                                : timer.startTimer();
+                            timer.resetTimer(focusT);
                           },
-                          child: Icon(timer.isRunning? Icons.stop : Icons.play_arrow,color: Colors.black,size: 30,),
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15)
-                      ),),
-                      ElevatedButton(
-                        onPressed: () {
-                          timer.resetTimer(restT);
-                        },
-                        child: Icon(Icons.skip_next,color: Colors.black,size: 30,),
+                          child: Icon(Icons.refresh,color: Colors.black,size: 30,),
+                          style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(),
+                              padding: EdgeInsets.symmetric(horizontal: 5,vertical: 5)
+                          ),),
+                        ElevatedButton(
+                            onPressed: () {
+                              timer.isRunning
+                                  ? timer.stopTimer()
+                                  : timer.startTimer();
+                            },
+                            child: Icon(timer.isRunning? Icons.stop : Icons.play_arrow,color: Colors.black,size: 30,),
                         style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(),
-                            padding: EdgeInsets.symmetric(horizontal: 5,vertical: 5)
+                          shape: CircleBorder(),
+                          padding: EdgeInsets.symmetric(horizontal: 15,vertical: 15)
                         ),),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+                        ElevatedButton(
+                          onPressed: () {
+                            timer.resetTimer(restT);
+                          },
+                          child: Icon(Icons.skip_next,color: Colors.black,size: 30,),
+                          style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(),
+                              padding: EdgeInsets.symmetric(horizontal: 5,vertical: 5)
+                          ),),
+                      ],
+                    ),
 
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+          DraggableScrollableSheet(
+              initialChildSize: 0.3,
+              minChildSize: 0.1,
+              maxChildSize: 1.0,
+              builder: (BuildContext context,ScrollController scrollController){
+                // var taskProvider = Provider.of<task>(context);
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  child: ListView.builder(
+                    controller: scrollController,
+                      // itemCount: taskProvider.tasks.length,
+                      itemBuilder: (context,index){
+                    return Card();
+                  }),
+                );
+              } )
+      ]),
     );
   }
 }
@@ -95,25 +117,25 @@ class ClockPainter extends CustomPainter {
     final radius = size.width / 2;
 
     final paintCircle = Paint()
-      ..color = Colors.grey[300]!
+      ..color = Colors.blueGrey
       ..style = PaintingStyle.fill;
 
     final paintBorder = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4;
+      ..strokeWidth = 8;
 
     final paintHand = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4
+      ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
 
     // 畫出時鐘圓盤
     canvas.drawCircle(center, radius, paintCircle);
     canvas.drawCircle(center, radius, paintBorder);
 
-    // 計算秒針 & 分針的角度
+    // 計算秒針的角度
     final secondAngle = (pi / 30) * seconds - (pi / 2);
 
     // 繪製秒針

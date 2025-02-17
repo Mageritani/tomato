@@ -42,7 +42,7 @@ class _taskState extends State<task> {
                   SizedBox(
                     height: 8,
                   ),
-                  Text("FocusTime:  ${_frange.toInt()}  mines"),
+                  Text("FocusTime:  ${_frange.toInt()}  mines",style: TextStyle(fontSize: 20),),
                   Slider(
                       value: _frange,
                       max: 60,
@@ -54,7 +54,7 @@ class _taskState extends State<task> {
                           _frange = value;
                         });
                       }),
-                  Text("RestTime:  ${_rrange.toInt()}  mines"),
+                  Text("RestTime:  ${_rrange.toInt()}  mines",style: TextStyle(fontSize: 20),),
                   Slider(
                       value: _rrange,
                       max: 60,
@@ -191,7 +191,7 @@ class _taskState extends State<task> {
                                             .tertiary),
                                   ),
                                   subtitle: Text(
-                                      "Focus: ${tasks[index]["Focus"]}, Rest: ${tasks[index]["rest"]}"),
+                                      "Focus: ${tasks[index]["Focus"]}, Rest: ${tasks[index]["rest"]}",style: TextStyle(fontSize: 20),),
                                   trailing: IconButton(
                                       onPressed: () => DeleteTask(index),
                                       icon: Icon(
