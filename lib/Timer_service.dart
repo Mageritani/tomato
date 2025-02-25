@@ -28,7 +28,6 @@ class TimerService extends ChangeNotifier {
 
         if (_seconds == 0 && _minutes == 0) {
           stopTimer();
-          // Vibration.vibrate(duration: 500);
         } else if(_seconds == -1) {
           _seconds = 59;
           _minutes--;

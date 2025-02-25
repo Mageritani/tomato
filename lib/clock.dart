@@ -113,19 +113,19 @@ class ClockPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2;
+    final center = Offset(size.width / 2, size.height / 2);  //時鐘位置
+    final radius = size.width / 2; // 半徑圓心位置
 
-    final paintCircle = Paint()
+    final paintCircle = Paint()  // 背景顏色
       ..color = Colors.blueGrey
       ..style = PaintingStyle.fill;
 
-    final paintBorder = Paint()
+    final paintBorder = Paint()  //時鐘外框
       ..color = Colors.black
       ..style = PaintingStyle.stroke
       ..strokeWidth = 8;
 
-    final paintHand = Paint()
+    final paintHand = Paint() // 秒針
       ..color = Colors.black
       ..style = PaintingStyle.stroke
       ..strokeWidth = 6
@@ -148,7 +148,7 @@ class ClockPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(ClockPainter oldDelegate) {
+  bool shouldRepaint(ClockPainter oldDelegate) { //重新計時
     return oldDelegate.seconds != seconds;
   }
 }

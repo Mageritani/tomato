@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tomato/Timer_service.dart';
+import 'package:tomato/chart.dart';
 import 'package:tomato/clock.dart';
 
 class task extends StatefulWidget {
@@ -131,7 +132,10 @@ class _taskState extends State<task> {
       appBar: AppBar(
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                List<String> focusTime = tasks.map((task) => task["Focus"].toString()).toList();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => chart(focusTime: focusTime,)));
+              },
               icon: Icon(
                 Icons.bar_chart_sharp,
                 color: Theme.of(context).colorScheme.tertiary,
