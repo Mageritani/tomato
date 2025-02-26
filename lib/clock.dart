@@ -3,12 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tomato/Timer_service.dart';
+import 'package:tomato/task.dart';
 
 
 class TimerScreen extends StatelessWidget {
+  final List<TaskModel> tasks;
   final int focusT;
   final int restT;
-  const TimerScreen({super.key,required this.focusT,required this.restT});
+  const TimerScreen({super.key,required this.focusT,required this.restT, required this.tasks});
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +95,40 @@ class TimerScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30),
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  child: ListView.builder(
-                    controller: scrollController,
-                      // itemCount: taskProvider.tasks.length,
-                      itemBuilder: (context,index){
-                    return Card();
-                  }),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ListView.builder(
+                      controller: scrollController,
+                        itemCount: tasks.length,
+                        itemBuilder: (context,index){
+                      return Card(
+                        color: Colors.grey[700],
+                        child: ListTile(
+                            title: Text(
+                          tasks[index].title,
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .tertiary),
+                        ),
+                            subtitle: Text(
+                              "Focus: ${tasks[index].Focus}, Rest: ${tasks[index].Rest}",style: TextStyle(fontSize: 20),),
+                            onTap: () {
+                              final timerService =
+                              Provider.of<TimerService>(context,
+                                  listen: false);
+                              timerService.setTime(tasks[index].Focus);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TimerScreen(
+                                        tasks: tasks,
+                                          focusT: tasks[index].Focus,
+                                          restT: tasks[index].Rest)));
+                            }),
+                      );
+                    }),
+                  ),
                 );
               } )
       ]),

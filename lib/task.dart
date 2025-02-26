@@ -12,7 +12,7 @@ class task extends StatefulWidget {
 }
 
 class _taskState extends State<task> {
-  List<Map<String, dynamic>> tasks = [];
+  List<TaskModel> tasks = [];
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   double Frange = 0;
   double Rrange = 0;
@@ -82,11 +82,11 @@ class _taskState extends State<task> {
                 TextButton(
                     onPressed: () {
                       if (_taskController.text.isNotEmpty) {
-                        final newTask = {
-                          "title": _taskController.text,
-                          "Focus": _frange.toInt(),
-                          "rest": _rrange.toInt()
-                        };
+                        final newTask = TaskModel(
+                          title:  _taskController.text,
+                          Focus:  _frange.toInt(),
+                          Rest:                      _rrange.toInt()
+                      );
                         setState(() {
                           tasks.add(newTask);
                         });
@@ -107,22 +107,25 @@ class _taskState extends State<task> {
 
   void DeleteTask(int index) {
     final removeTask = tasks[index];
+
     _listKey.currentState?.removeItem(index, (context, animation) {
       return SizeTransition(
         sizeFactor: animation,
         child: Card(
           color: Theme.of(context).colorScheme.inversePrimary,
           child: ListTile(
-            title: Text(removeTask["title"]),
+            title: Text(removeTask.title),
             subtitle:
-                Text("Focus${removeTask["Focus"]},rest ${removeTask["rest"]}"),
+                Text("Focus${removeTask.Focus},rest ${removeTask.Rest}"),
           ),
         ),
       );
     }, duration: Duration(milliseconds: 300));
 
-    setState(() {
-      tasks.removeAt(index);
+    Future.delayed(Duration(milliseconds: 300), (){
+      setState(() {
+        tasks.removeAt(index);
+      });
     });
   }
 
@@ -133,7 +136,7 @@ class _taskState extends State<task> {
         actions: [
           IconButton(
               onPressed: () {
-                List<String> focusTime = tasks.map((task) => task["Focus"].toString()).toList();
+                List<String> focusTime = tasks.map((task) => task.Focus.toString()).toList();
                 Navigator.push(context, MaterialPageRoute(builder: (context) => chart(focusTime: focusTime,)));
               },
               icon: Icon(
@@ -188,14 +191,14 @@ class _taskState extends State<task> {
                                   Theme.of(context).colorScheme.inversePrimary,
                               child: ListTile(
                                   title: Text(
-                                    tasks[index]["title"],
+                                    tasks[index].title,
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .tertiary),
                                   ),
                                   subtitle: Text(
-                                      "Focus: ${tasks[index]["Focus"]}, Rest: ${tasks[index]["rest"]}",style: TextStyle(fontSize: 20),),
+                                      "Focus: ${tasks[index].Focus}, Rest: ${tasks[index].Rest}",style: TextStyle(fontSize: 20),),
                                   trailing: IconButton(
                                       onPressed: () => DeleteTask(index),
                                       icon: Icon(
@@ -206,13 +209,14 @@ class _taskState extends State<task> {
                                     final timerService =
                                         Provider.of<TimerService>(context,
                                             listen: false);
-                                    timerService.setTime(tasks[index]["Focus"]);
+                                    timerService.setTime(tasks[index].Focus);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => TimerScreen(
-                                                focusT: tasks[index]["Focus"],
-                                                restT: tasks[index]["rest"])));
+                                              tasks: tasks,
+                                                focusT: tasks[index].Focus,
+                                                restT: tasks[index].Rest)));
                                   }),
                             ),
                           );
@@ -239,4 +243,11 @@ class _taskState extends State<task> {
       ),
     );
   }
+}
+
+class TaskModel {
+  final String title;
+  final int Focus;
+  final int Rest;
+  TaskModel({required this.title, required this.Focus,required this.Rest});
 }
