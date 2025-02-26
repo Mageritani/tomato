@@ -43,7 +43,10 @@ class _taskState extends State<task> {
                   SizedBox(
                     height: 8,
                   ),
-                  Text("FocusTime:  ${_frange.toInt()}  mines",style: TextStyle(fontSize: 20),),
+                  Text(
+                    "FocusTime:  ${_frange.toInt()}  mines",
+                    style: TextStyle(fontSize: 20),
+                  ),
                   Slider(
                       value: _frange,
                       max: 60,
@@ -55,7 +58,10 @@ class _taskState extends State<task> {
                           _frange = value;
                         });
                       }),
-                  Text("RestTime:  ${_rrange.toInt()}  mines",style: TextStyle(fontSize: 20),),
+                  Text(
+                    "RestTime:  ${_rrange.toInt()}  mines",
+                    style: TextStyle(fontSize: 20),
+                  ),
                   Slider(
                       value: _rrange,
                       max: 60,
@@ -83,10 +89,9 @@ class _taskState extends State<task> {
                     onPressed: () {
                       if (_taskController.text.isNotEmpty) {
                         final newTask = TaskModel(
-                          title:  _taskController.text,
-                          Focus:  _frange.toInt(),
-                          Rest:                      _rrange.toInt()
-                      );
+                            title: _taskController.text,
+                            Focus: _frange.toInt(),
+                            Rest: _rrange.toInt());
                         setState(() {
                           tasks.add(newTask);
                         });
@@ -115,14 +120,13 @@ class _taskState extends State<task> {
           color: Theme.of(context).colorScheme.inversePrimary,
           child: ListTile(
             title: Text(removeTask.title),
-            subtitle:
-                Text("Focus${removeTask.Focus},rest ${removeTask.Rest}"),
+            subtitle: Text("Focus${removeTask.Focus},rest ${removeTask.Rest}"),
           ),
         ),
       );
     }, duration: Duration(milliseconds: 300));
 
-    Future.delayed(Duration(milliseconds: 300), (){
+    Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         tasks.removeAt(index);
       });
@@ -136,8 +140,14 @@ class _taskState extends State<task> {
         actions: [
           IconButton(
               onPressed: () {
-                List<String> focusTime = tasks.map((task) => task.Focus.toString()).toList();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => chart(focusTime: focusTime,)));
+                List<String> focusTime =
+                    tasks.map((task) => task.Focus.toString()).toList();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => chart(
+                              focusTime: focusTime,
+                            )));
               },
               icon: Icon(
                 Icons.bar_chart_sharp,
@@ -198,7 +208,9 @@ class _taskState extends State<task> {
                                             .tertiary),
                                   ),
                                   subtitle: Text(
-                                      "Focus: ${tasks[index].Focus}, Rest: ${tasks[index].Rest}",style: TextStyle(fontSize: 20),),
+                                    "Focus: ${tasks[index].Focus}, Rest: ${tasks[index].Rest}",
+                                    style: TextStyle(fontSize: 20),
+                                  ),
                                   trailing: IconButton(
                                       onPressed: () => DeleteTask(index),
                                       icon: Icon(
@@ -214,7 +226,7 @@ class _taskState extends State<task> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => TimerScreen(
-                                              tasks: tasks,
+                                                tasks: tasks,
                                                 focusT: tasks[index].Focus,
                                                 restT: tasks[index].Rest)));
                                   }),
@@ -249,5 +261,6 @@ class TaskModel {
   final String title;
   final int Focus;
   final int Rest;
-  TaskModel({required this.title, required this.Focus,required this.Rest});
+
+  TaskModel({required this.title, required this.Focus, required this.Rest});
 }
